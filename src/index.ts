@@ -7,9 +7,9 @@ const app = express();
 const port = process.env.port || 8080;
 
 app.get("/", (req, res) => {
-  res.send("Oee");
+  res.json({ message: "Boilerplate Backend" });
 });
 
 app.listen(port, () => {
-  console.log(`listening on port ${port}`);
+  console.log(`listening on port http://localhost:${port}`);
 });
