@@ -1,14 +1,21 @@
 import express from "express";
 import { config } from "dotenv";
 import { router } from "./router";
+import { MongoClient } from "./database/mongo";
 
-config();
+const main = async () => {
+  config();
+  const app = express();
 
-const app = express();
-const port = process.env.port || 8080;
+  await MongoClient.connect();
 
-app.use(router);
+  app.use(router);
 
-app.listen(port, () => {
-  console.log(`listening on port http://localhost:${port}`);
-});
+  const PORT = process.env.PORT || 8080;
+
+  app.listen(PORT, () => {
+    console.log(`listening on port http://localhost:${PORT}`);
+  });
+};
+
+main();
