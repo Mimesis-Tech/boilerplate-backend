@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { MongoGetUsersRepository } from "./repository/getUsers/mongoGetUsers";
 import { GetUsersController } from "./controllers/getUsers/getUsers";
+import { MongoCreateUserRepository } from "./repository/createUsers/mongoCreateUsers";
+import { CreateUserController } from "./controllers/createUsers/createUsers";
 
 export const router = Router();
 
@@ -10,5 +12,18 @@ router.get("/users", async (req, res) => {
 
   const { body, statusCode } = await getUsersController.handle();
 
-  res.send(body).status(statusCode);
+  res.status(statusCode).send(body);
+});
+
+router.post("/users", async (req, res) => {
+  const mongoCreateUserRepository = new MongoCreateUserRepository();
+  const createUserController = new CreateUserController(
+    mongoCreateUserRepository
+  );
+
+  const { body, statusCode } = await createUserController.handle({
+    body: req.body,
+  });
+
+  res.status(statusCode).send(body);
 });

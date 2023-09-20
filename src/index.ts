@@ -7,6 +7,8 @@ const main = async () => {
   config();
   const app = express();
 
+  app.use(express.json());
+
   await MongoClient.connect();
 
   app.use(router);
