@@ -1,23 +1,18 @@
-import express from "express";
 import { config } from "dotenv";
-import { router } from "./router";
-import { MongoClient } from "./database/mongo";
+config();
 
-const main = async () => {
-  config();
-  const app = express();
+import express from "express";
 
-  app.use(express.json());
+const app = express();
 
-  await MongoClient.connect();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-  app.use(router);
+app.get("/", (req, res) => {
+  res.send("oi");
+});
 
-  const PORT = process.env.PORT || 8080;
-
-  app.listen(PORT, () => {
-    console.log(`listening on port http://localhost:${PORT}`);
-  });
-};
-
-main();
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}.`);
+});
