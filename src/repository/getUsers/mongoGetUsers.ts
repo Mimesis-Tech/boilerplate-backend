@@ -2,7 +2,7 @@ import { IGetUsersRepository } from "../../types/IGetUsersRepository";
 import { MongoClient } from "../../database/mongo";
 import { User } from "../../models/user";
 
-export class MongoUsersRepository implements IGetUsersRepository {
+export class MongoGetUsersRepository implements IGetUsersRepository {
   async getUsers(): Promise<User[]> {
     const users = await MongoClient.db
       .collection<Omit<User, "id">>("users")
