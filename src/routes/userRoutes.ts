@@ -5,7 +5,8 @@ export const userRoutes = Router();
 const controller = new UserController();
 
 userRoutes.get("/", controller.getUsers);
-userRoutes.get("/email/:email", controller.getByEmail);
-userRoutes.get("/id/:id", controller.getById);
+userRoutes.get("/email/:email", controller.getUserByEmail);
+userRoutes.get("/id/:id", controller.getUserById);
 userRoutes.post("/", controller.createUser);
-userRoutes.delete("/delete/:id", controller.deleteById);
+userRoutes.put("/:id", controller.updateUserById);
+userRoutes.delete("/delete/:id", controller.deleteUserById);

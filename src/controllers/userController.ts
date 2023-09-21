@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/userService";
 import { httpStatusCodes } from "../responseHandlers/statusCode";
-import { ICreateUserDTO } from "../types/userDTOs";
+import { ICreateUserDTO, IUpdateUserDTO } from "../types/userDTOs";
 
 const service = new UserService();
 
@@ -26,7 +26,22 @@ export class UserController {
     }
   }
 
-  async deleteById(req: Request, res: Response) {
+  async updateUserById(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const user: IUpdateUserDTO = req.body;
+
+      const result = await service.updateById(id, user);
+
+      return res.status(httpStatusCodes.OK).json(result);
+    } catch (error: any) {
+      return res
+        .status(error.status ?? httpStatusCodes.BAD_REQUEST)
+        .json(error.message ?? error);
+    }
+  }
+
+  async deleteUserById(req: Request, res: Response) {
     try {
       const { id } = req.params;
 
@@ -40,7 +55,7 @@ export class UserController {
     }
   }
 
-  async getByEmail(req: Request, res: Response) {
+  async getUserByEmail(req: Request, res: Response) {
     try {
       const { email } = req.params;
 
@@ -54,7 +69,7 @@ export class UserController {
     }
   }
 
-  async getById(req: Request, res: Response) {
+  async getUserById(req: Request, res: Response) {
     try {
       const { id } = req.params;
 

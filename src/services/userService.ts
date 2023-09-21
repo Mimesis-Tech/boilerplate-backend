@@ -1,4 +1,4 @@
-import { ICreateUserDTO, IUser } from "../types/userDTOs";
+import { ICreateUserDTO, IUpdateUserDTO, IUser } from "../types/userDTOs";
 import { UserRepository } from "../repositories/userRepository";
 import {
   BadRequest,
@@ -30,7 +30,7 @@ export class UserService {
     }
 
     if (!validator.isEmail(email)) {
-      throw new BadRequest("User email not found.");
+      throw new BadRequest("User email invalid.");
     }
 
     const existEmail = await userModel.findOne({ email: email });
@@ -42,27 +42,56 @@ export class UserService {
     const saltRounds = parseInt(process.env.SALT_ROUNDS!);
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const createdUser = {
+    const wasCreated = {
       name,
       email,
       password: hashedPassword,
       photo,
     };
 
-    const id = await repository.create(createdUser);
+    const id = await repository.create(wasCreated);
 
     return await repository.getById(id);
   }
 
+  async updateById(_id: string, user: IUpdateUserDTO): Promise<IUser> {
+    const wasUpdated = await repository.getById(_id);
+
+    if (!wasUpdated) {
+      throw new NotFound("User");
+    }
+
+    const { email } = user;
+
+    if (!validator.isEmail(email as string)) {
+      throw new BadRequest("User email invalid.");
+    }
+
+    const isYourEmail = wasUpdated.email === user.email;
+
+    if (!isYourEmail) {
+      const existEmail = await userModel.findOne({ email: email });
+
+      if (existEmail) {
+        throw new Conflict("User");
+      }
+    }
+
+    await repository.updateById(_id, user);
+
+    return await repository.getById(_id);
+  }
+
   async deleteById(_id: string): Promise<IUser> {
-    const user = await repository.getById(_id);
-    if (!user) {
+    const wasDeleted = await repository.getById(_id);
+
+    if (!wasDeleted) {
       throw new NotFound("User");
     }
 
     await repository.deleteById(_id);
 
-    return user;
+    return wasDeleted;
   }
 
   async getByEmail(email: string): Promise<IUser> {
