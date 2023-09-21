@@ -6,21 +6,17 @@ import { routes } from "./routes/routes";
 
 const mongooseClient = new MongooseClient();
 
-const main = async () => {
-  config();
-  const app = express();
+config();
+const app = express();
 
-  mongooseClient.connect();
+mongooseClient.connect();
 
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-  app.use(routes);
+app.use(routes);
 
-  const port = process.env.PORT || 8080;
-  app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}.`);
-  });
-};
-
-main();
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}.`);
+});
