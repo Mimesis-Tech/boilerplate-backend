@@ -13,6 +13,7 @@ export interface IUpdateUserDTO {
 
 export interface IUser {
   _id: string;
+  googleID: string;
   name: string;
   email: string;
   password: string;

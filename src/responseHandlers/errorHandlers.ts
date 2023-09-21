@@ -47,6 +47,17 @@ export class BadRequest extends BaseError {
   }
 }
 
+export class NotAuthorizedd extends BaseError {
+  constructor(message?: string) {
+    super(
+      message ?? `Unauthorized credentials try again`,
+      httpStatusCodes.NOT_AUTHORIZED
+    );
+
+    Object.setPrototypeOf(this, NotAuthorizedd.prototype);
+  }
+}
+
 export class InternalError extends BaseError {
   constructor() {
     super(`Internal error`, httpStatusCodes.INTERNAL_SERVER_ERROR);

@@ -3,12 +3,14 @@ import { UserRepository } from "../repositories/userRepository";
 import {
   BadRequest,
   Conflict,
+  NotAuthorizedd,
   NotFound,
 } from "../responseHandlers/errorHandlers";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { config } from "dotenv";
 import userModel from "../models/user";
+import jwt from "jsonwebtoken";
 config();
 
 const repository = new UserRepository();
@@ -33,9 +35,9 @@ export class UserService {
       throw new BadRequest("User email invalid.");
     }
 
-    const existEmail = await userModel.findOne({ email: email });
+    const existUser = await userModel.findOne({ email: email });
 
-    if (existEmail) {
+    if (existUser) {
       throw new Conflict("User");
     }
 
@@ -110,5 +112,30 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async nativeLogin(email: string, password: string): Promise<string> {
+    const existUser = await userModel.findOne({ email: email });
+
+    if (!existUser) {
+      throw new NotFound("User");
+    }
+
+    const checkPassword = await bcrypt.compare(password, existUser.password);
+
+    if (!checkPassword) {
+      throw new NotAuthorizedd();
+    }
+
+    const secretKey = process.env.JWT_SECRET_KEY;
+    const token = jwt.sign(
+      {
+        _id: existUser._id,
+      },
+      secretKey!,
+      { expiresIn: "1d" }
+    );
+
+    return token;
   }
 }
