@@ -25,4 +25,32 @@ export class UserController {
         .json(error.message ?? error);
     }
   }
+
+  async getByEmail(req: Request, res: Response) {
+    try {
+      const { email } = req.params;
+
+      const result = await service.getByEmail(email);
+
+      return res.status(httpStatusCodes.OK).json(result);
+    } catch (error: any) {
+      return res
+        .status(error.status ?? httpStatusCodes.NOT_FOUND)
+        .json(error.message ?? error);
+    }
+  }
+
+  async getById(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const result = await service.getById(id);
+
+      return res.status(httpStatusCodes.OK).json(result);
+    } catch (error: any) {
+      return res
+        .status(error.status ?? httpStatusCodes.NOT_FOUND)
+        .json(error.message ?? error);
+    }
+  }
 }

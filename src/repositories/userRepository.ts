@@ -3,16 +3,26 @@ import userModel from "../models/user";
 
 export class UserRepository {
   async getAll(): Promise<IUser[]> {
-    return await userModel.find({});
+    return await userModel.find({}, "_id name email photo");
   }
 
   async create(user: ICreateUserDTO): Promise<string> {
     const { _id } = await userModel.create(user);
+
     return _id as unknown as string;
   }
 
   async getById(_id: string): Promise<IUser> {
-    const user = await userModel.findOne({ _id }).exec();
+    const user = await userModel
+      .findOne({ _id }, "_id name email photo")
+      .exec();
+    return user as unknown as IUser;
+  }
+
+  async getByEmail(email: string): Promise<IUser> {
+    const user = await userModel
+      .findOne({ email }, "_id name email photo")
+      .exec();
     return user as unknown as IUser;
   }
 }

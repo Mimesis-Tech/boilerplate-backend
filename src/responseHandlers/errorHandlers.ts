@@ -24,6 +24,18 @@ export class NotFound extends BaseError {
   }
 }
 
+export class Conflict extends BaseError {
+  object: string;
+
+  constructor(object: string) {
+    super(`${object} conflict in the request`, httpStatusCodes.CONFLICT);
+
+    this.object = object;
+
+    Object.setPrototypeOf(this, Conflict.prototype);
+  }
+}
+
 export class BadRequest extends BaseError {
   constructor(message?: string) {
     super(
