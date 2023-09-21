@@ -16,7 +16,7 @@ export class UserController {
     try {
       const user: ICreateUserDTO = req.body;
 
-      const result = await service.createUser(user);
+      const result = await service.create(user);
 
       return res.status(httpStatusCodes.CREATED).json(result);
     } catch (error: any) {

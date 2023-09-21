@@ -18,7 +18,7 @@ export class UserService {
     return await repository.getAll();
   }
 
-  async createUser(user: ICreateUserDTO): Promise<IUser> {
+  async create(user: ICreateUserDTO): Promise<IUser> {
     const { name, password, email, photo } = user;
 
     if (!name) {
