@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon src/index.ts",
+    "dev": "nodemon src/index.ts",
     "test": "jest --passWithNoTests"
   },
   "keywords": [],
@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.5",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^20.6.2",
     "@types/validator": "^13.11.1",
     "dotenv": "^16.3.1",

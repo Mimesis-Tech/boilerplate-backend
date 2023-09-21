@@ -1,18 +1,26 @@
 import { config } from "dotenv";
-config();
-
 import express from "express";
+import { MongooseClient } from "./database/mongo";
 
-const app = express();
+import { routes } from "./routes/routes";
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+const mongooseClient = new MongooseClient();
 
-app.get("/", (req, res) => {
-  res.send("oi");
-});
+const main = async () => {
+  config();
+  const app = express();
 
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}.`);
-});
+  mongooseClient.connect();
+
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
+
+  app.use(routes);
+
+  const port = process.env.PORT || 8080;
+  app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}.`);
+  });
+};
+
+main();
