@@ -8,3 +8,4 @@ userRoutes.get("/", controller.getUsers);
 userRoutes.get("/email/:email", controller.getByEmail);
 userRoutes.get("/id/:id", controller.getById);
 userRoutes.post("/", controller.createUser);
+userRoutes.delete("/delete/:id", controller.deleteById);

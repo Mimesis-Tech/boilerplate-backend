@@ -26,6 +26,20 @@ export class UserController {
     }
   }
 
+  async deleteById(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const result = await service.deleteById(id);
+
+      return res.status(httpStatusCodes.OK).json(result);
+    } catch (error: any) {
+      return res
+        .status(error.status ?? httpStatusCodes.BAD_REQUEST)
+        .json(error.message ?? error);
+    }
+  }
+
   async getByEmail(req: Request, res: Response) {
     try {
       const { email } = req.params;

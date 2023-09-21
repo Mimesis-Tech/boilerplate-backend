@@ -54,6 +54,17 @@ export class UserService {
     return await repository.getById(id);
   }
 
+  async deleteById(_id: string): Promise<IUser> {
+    const user = await repository.getById(_id);
+    if (!user) {
+      throw new NotFound("User");
+    }
+
+    await repository.deleteById(_id);
+
+    return user;
+  }
+
   async getByEmail(email: string): Promise<IUser> {
     const user = await repository.getByEmail(email);
     if (!user) {
