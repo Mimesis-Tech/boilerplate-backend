@@ -1,7 +1,7 @@
 export interface ICreateUserDTO {
   name: string;
   email: string;
-  password: string;
+  password?: string;
   photo?: string;
 }
 
@@ -12,10 +12,9 @@ export interface IUpdateUserDTO {
 }
 
 export interface IUser {
-  _id: string;
-  googleID: string;
+  id?: string;
   name: string;
+  password?: string;
   email: string;
-  password: string;
   photo?: string;
 }

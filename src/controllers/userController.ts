@@ -6,20 +6,6 @@ import { ICreateUserDTO, IUpdateUserDTO } from "../types/userDTOs";
 const service = new UserService();
 
 export class UserController {
-  async nativeLogin(req: Request, res: Response) {
-    try {
-      const { email, password }: { email: string; password: string } = req.body;
-
-      const result = await service.nativeLogin(email, password);
-
-      return res.status(httpStatusCodes.OK).json(result);
-    } catch (error: any) {
-      return res
-        .status(error.status ?? httpStatusCodes.NOT_AUTHORIZED)
-        .json(error.message ?? error);
-    }
-  }
-
   async getUsers(req: Request, res: Response) {
     const result = await service.getAll();
     return res.status(httpStatusCodes.OK).json(result);

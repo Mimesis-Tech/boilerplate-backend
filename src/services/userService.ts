@@ -27,7 +27,7 @@ export class UserService {
       throw new BadRequest("User name not found.");
     }
 
-    if (!password || password.length < 6) {
+    if (!password || password.length < 8) {
       throw new BadRequest("User password not found or invalid.");
     }
 
@@ -35,7 +35,7 @@ export class UserService {
       throw new BadRequest("User email invalid.");
     }
 
-    const existUser = await userModel.findOne({ email: email });
+    const existUser = await repository.getByEmail(email);
 
     if (existUser) {
       throw new Conflict("User");
@@ -51,9 +51,9 @@ export class UserService {
       photo,
     };
 
-    const id = await repository.create(wasCreated);
+    const _id = await repository.create(wasCreated);
 
-    return await repository.getById(id);
+    return await repository.getById(_id);
   }
 
   async updateById(_id: string, user: IUpdateUserDTO): Promise<IUser> {
@@ -107,35 +107,12 @@ export class UserService {
 
   async getById(id: string): Promise<IUser> {
     const user = await repository.getById(id);
+
     if (!user) {
+      console.log("eRRO ID");
       throw new NotFound("User");
     }
 
     return user;
-  }
-
-  async nativeLogin(email: string, password: string): Promise<string> {
-    const existUser = await userModel.findOne({ email: email });
-
-    if (!existUser) {
-      throw new NotFound("User");
-    }
-
-    const checkPassword = await bcrypt.compare(password, existUser.password);
-
-    if (!checkPassword) {
-      throw new NotAuthorizedd();
-    }
-
-    const secretKey = process.env.JWT_SECRET_KEY;
-    const token = jwt.sign(
-      {
-        _id: existUser._id,
-      },
-      secretKey!,
-      { expiresIn: "1d" }
-    );
-
-    return token;
   }
 }
